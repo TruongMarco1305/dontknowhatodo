@@ -18,4 +18,4 @@ public class GraphQLExceptionHandler extends DataFetcherExceptionResolverAdapter
                 .errorType(graphql.ErrorType.DataFetchingException)
                 .build();
     }
-}
+} 
