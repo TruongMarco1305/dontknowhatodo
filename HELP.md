@@ -32,19 +32,9 @@ The default setup assumes that the GraphQL schema file for the remote service is
 You can learn more about the [plugin configuration options](https://github.com/deweyjose/graphqlcodegen) and
 [how to use the generated types](https://netflix.github.io/dgs/generating-code-from-schema/) to adapt the default setup.
 
-
-### Docker Compose support
-This project contains a Docker Compose file named `compose.yaml`.
-In this file, the following services have been defined:
-
-* postgres: [`postgres:latest`](https://hub.docker.com/_/postgres)
-
-Please review the tags of the used images and set them to the same as you're running in production.
-
 ### Maven Parent overrides
 
 Due to Maven's design, elements are inherited from the parent POM to the project POM.
 While most of the inheritance is fine, it also inherits unwanted elements like `<license>` and `<developers>` from the parent.
 To prevent this, the project POM contains empty overrides for these elements.
 If you manually switch to a different parent and actually want the inheritance, you need to remove those overrides.
-
