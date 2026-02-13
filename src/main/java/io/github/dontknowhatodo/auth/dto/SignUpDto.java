@@ -1,17 +1,15 @@
 package io.github.dontknowhatodo.auth.dto;
 
-import io.github.dontknowhatodo.config.BaseDtoConfig;
 import io.github.dontknowhatodo.user.UserInfo;
 import lombok.Getter;
 
 @Getter
-public class SignUpDto extends BaseDtoConfig<UserInfo> {
+public class SignUpDto {
     private String username;
     private String email;
     private String password;
     private String name;
 
-    @Override
     public void loadFromEntity(UserInfo entity) {
         this.username = entity.getUsername();
         this.email = entity.getEmail();
@@ -19,7 +17,6 @@ public class SignUpDto extends BaseDtoConfig<UserInfo> {
         this.name = entity.getName();
     }
 
-    @Override
     public UserInfo toEntity() {
         return UserInfo.builder()
             .username(this.username)

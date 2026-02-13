@@ -2,6 +2,7 @@ package io.github.dontknowhatodo.user;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -10,11 +11,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserInfoDetails implements UserDetails {
 
+    private final UUID id;
     private final String username;
     private final String password;
     private final List<GrantedAuthority> authorities;
 
     public UserInfoDetails(UserInfo userInfo) {
+        this.id = userInfo.getId();
         this.username = userInfo.getUsername();
         this.password = userInfo.getPassword();
         this.authorities = List.of(userInfo.getRoles().split(","))
@@ -36,6 +39,10 @@ public class UserInfoDetails implements UserDetails {
     @Override
     public String getPassword() {
         return password;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     @Override
