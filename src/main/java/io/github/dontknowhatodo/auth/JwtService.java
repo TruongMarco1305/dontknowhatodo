@@ -8,9 +8,9 @@ import java.util.UUID;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import io.github.dontknowhatodo.user.UserInfoDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -26,19 +26,18 @@ public class JwtService {
     @Value("${application.security.jwt.expiration}")
     private long jwtExpiration;
     
-    public String generateToken(UserDetails userDetails, UUID userId) {
+    public String generateToken(UUID userId) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("uid", userId.toString());
-        return buildToken(claims, userDetails.getUsername(), jwtExpiration);
+        return buildToken(claims, userId.toString());
     }
 
-    private String buildToken(Map<String, Object> claims, String subject, long expiration) {
+    private String buildToken(Map<String, Object> claims, String subject) {
         return Jwts
                 .builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .setExpiration(new Date(System.currentTimeMillis() + this.jwtExpiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -48,12 +47,8 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String extractUsername(String token) {
+    public String extractSubject(String token) {
         return extractClaim(token, Claims::getSubject);
-    }
-    
-    public String extractUserId(String token) {
-        return extractClaim(token, claims -> claims.get("uid", String.class));
     }
 
     public Boolean isTokenExpired(String token) {
@@ -78,8 +73,8 @@ public class JwtService {
                 .getBody();
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    public Boolean validateToken(String token, UserInfoDetails userDetails) {
+        final String subject = extractSubject(token);
+        return (subject.equals(userDetails.getId().toString()) && !isTokenExpired(token));
     }
 }
