@@ -2,7 +2,6 @@ package io.github.dontknowhatodo.user;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import io.github.dontknowhatodo.auth.dto.SignUpDto;
 import io.github.dontknowhatodo.config.BaseEntityConfig;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,10 +34,6 @@ public class UserInfo extends BaseEntityConfig {
     @Column(nullable = false)
     private String roles;
 
-    public void loadFromSignupDto(SignUpDto dto) {
-        this.username = dto.getUsername();
-        this.email = dto.getEmail();
-        this.password = dto.getPassword();
-        this.roles = "ROLE_USER";
-    }
+    @Column(nullable = false)
+    private String name;
 }
