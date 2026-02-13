@@ -1,3 +1,11 @@
 type Query {
-    hello: String
+    getMe: UserType
+}
+
+type UserType {
+    id: String!
+    username: String!
+    email: String!
+    name: String!
+    roles: String!
 }

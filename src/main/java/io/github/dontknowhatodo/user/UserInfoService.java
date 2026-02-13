@@ -33,7 +33,7 @@ public class UserInfoService implements UserDetailsService {
         Optional<UserInfo> userInfo = repository.findByUsername(username);
 
         if (userInfo.isEmpty()) {
-            throw new UsernameNotFoundException("User not found with email: " + username);
+            throw new UsernameNotFoundException("User not found");
         }
 
         UserInfoDetails userDetails = new UserInfoDetails(userInfo.get());
@@ -59,5 +59,10 @@ public class UserInfoService implements UserDetailsService {
     public UserInfo getUserById(String id) {
         return repository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new NotFoundException("Invalid user"));
+    }
+
+    public UserInfo getUserByUsername(String username){
+        return repository.findByUsername(username).
+            orElseThrow(() -> new NotFoundException("Invalid user"));
     }
 }
