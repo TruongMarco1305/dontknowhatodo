@@ -36,7 +36,7 @@ public class UserInfoService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
 
-        UserInfoDetails userDetails = new UserInfoDetails(userInfo.get());
+        UserPrincipal userDetails = new UserPrincipal(userInfo.get());
         return new User(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
     }
 
