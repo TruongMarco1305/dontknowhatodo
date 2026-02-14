@@ -2,21 +2,33 @@ package io.github.dontknowhatodo.user;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
-public class UserInfoDetails implements UserDetails {
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class UserPrincipal implements OAuth2User, UserDetails {
 
     private final UUID id;
+    private final String name;
     private final String username;
+    private final String email;
     private final String password;
-    private final List<GrantedAuthority> authorities;
+    private final Collection<? extends GrantedAuthority> authorities;
+    private Map<String, Object> attributes;
 
-    public UserInfoDetails(UserInfo userInfo) {
+    public UserPrincipal(UserInfo userInfo) {
+        this.name = userInfo.getName();
+        this.email = userInfo.getEmail();
         this.id = userInfo.getId();
         this.username = userInfo.getUsername();
         this.password = userInfo.getPassword();
@@ -26,23 +38,10 @@ public class UserInfoDetails implements UserDetails {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    public UUID getId() {
-        return id;
+    public static UserPrincipal create(UserInfo userInfo, Map<String,Object> attributes) {
+        UserPrincipal UserPrincipal = new UserPrincipal(userInfo);
+        UserPrincipal.setAttributes(attributes);
+        return UserPrincipal;
     }
 
     @Override

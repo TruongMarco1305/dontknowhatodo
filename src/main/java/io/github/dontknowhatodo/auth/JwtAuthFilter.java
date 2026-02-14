@@ -10,7 +10,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.github.dontknowhatodo.exception.UnauthorizedException;
 import io.github.dontknowhatodo.user.UserInfo;
-import io.github.dontknowhatodo.user.UserInfoDetails;
+import io.github.dontknowhatodo.user.UserPrincipal;
 import io.github.dontknowhatodo.user.UserInfoService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -45,12 +45,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         if (subject != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserInfo userInfo = this.userInfoService.getUserById(subject);
-            UserInfoDetails userDetails = new UserInfoDetails(userInfo);
-            if (jwtService.validateToken(jwt, userDetails)) {
+            UserPrincipal userPrincipal = new UserPrincipal(userInfo);
+            if (jwtService.validateToken(jwt, userPrincipal)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
+                        userPrincipal,
                         null,
-                        userDetails.getAuthorities()
+                        userPrincipal.getAuthorities()
                 );
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);

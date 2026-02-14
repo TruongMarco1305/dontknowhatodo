@@ -8,9 +8,10 @@ import java.util.UUID;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import io.github.dontknowhatodo.user.UserInfoDetails;
+import io.github.dontknowhatodo.user.UserPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -25,6 +26,11 @@ public class JwtService {
 
     @Value("${application.security.jwt.expiration}")
     private long jwtExpiration;
+    
+    public String generateToken(Authentication authentication) {
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        return this.generateToken(userPrincipal.getId());
+    }
     
     public String generateToken(UUID userId) {
         Map<String, Object> claims = new HashMap<>();
@@ -73,7 +79,7 @@ public class JwtService {
                 .getBody();
     }
 
-    public Boolean validateToken(String token, UserInfoDetails userDetails) {
+    public Boolean validateToken(String token, UserPrincipal userDetails) {
         final String subject = extractSubject(token);
         return (subject.equals(userDetails.getId().toString()) && !isTokenExpired(token));
     }

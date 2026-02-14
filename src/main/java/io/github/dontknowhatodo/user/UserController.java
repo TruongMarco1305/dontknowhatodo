@@ -16,8 +16,8 @@ public class UserController {
     }
 
     @QueryMapping
-    public UserResponseDto getMe(@User UserInfoDetails userInfoDetails) {
-        UserInfo user = userInfoService.getUserById(userInfoDetails.getId().toString());
+    public UserResponseDto getMe(@User UserPrincipal userPrincipal) {
+        UserInfo user = userInfoService.getUserById(userPrincipal.getId().toString());
         return new UserResponseDto(user);
     }
 }
