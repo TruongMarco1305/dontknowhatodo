@@ -1,10 +1,9 @@
 package io.github.dontknowhatodo.user;
 
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 
+import io.github.dontknowhatodo.annonation.User;
 import io.github.dontknowhatodo.user.dto.UserResponseDto;
 
 @Controller
@@ -17,8 +16,8 @@ public class UserController {
     }
 
     @QueryMapping
-    public UserResponseDto getMe(@AuthenticationPrincipal UserDetails userDetails) {
-        UserInfo user = userInfoService.getUserByUsername(userDetails.getUsername());
+    public UserResponseDto getMe(@User UserInfoDetails userInfoDetails) {
+        UserInfo user = userInfoService.getUserById(userInfoDetails.getId().toString());
         return new UserResponseDto(user);
     }
 }

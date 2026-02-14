@@ -36,4 +36,7 @@ public class UserInfo extends BaseEntityConfig {
 
     @Column(nullable = false)
     private String name;
+
+    @Column()
+    private String imageUrl;
 }

@@ -19,8 +19,10 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
     private final AuthService authService;
+
     @Value("${application.security.jwt.expiration}")
     private long jwtExpiration;
+
     @Value("${spring.profiles.active}")
     private String environment;
 
@@ -40,8 +42,7 @@ public class AuthController {
     @PostMapping("/login")
     public void login(@RequestBody LoginDto loginInfo, HttpServletResponse response) {
         String token = this.authService.login(loginInfo);
-        ResponseCookie cookie;
-        cookie = ResponseCookie.from("accessToken", token)
+        ResponseCookie cookie = ResponseCookie.from("accessToken", token)
                 .httpOnly(true)
                 .secure(this.environment.equals("production"))
                 .path("/")
