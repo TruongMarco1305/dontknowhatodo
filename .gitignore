@@ -35,5 +35,5 @@ bin/
 build/
 /bin1/
 java/build/**
-*.properties
-tempCodeRunnerFile.xml
+.env
+.env.production

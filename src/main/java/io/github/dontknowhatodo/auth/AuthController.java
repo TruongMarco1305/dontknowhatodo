@@ -3,6 +3,7 @@ package io.github.dontknowhatodo.auth;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +53,7 @@ public class AuthController {
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
 
-    @PostMapping("/logout")
+    @DeleteMapping("/logout")
     public void logout(HttpServletResponse response) {
         ResponseCookie cookie = ResponseCookie.from("accessToken", "")
                 .httpOnly(true)
