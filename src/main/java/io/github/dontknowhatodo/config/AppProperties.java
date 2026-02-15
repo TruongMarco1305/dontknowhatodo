@@ -11,8 +11,13 @@ import lombok.Setter;
 @ConfigurationProperties(prefix = "application")
 @Getter
 public class AppProperties {
+    private String profile;
     private final Security security = new Security();
 
+    public Boolean isProduction() {
+        return "production".equalsIgnoreCase(this.profile);
+    }
+    
     public static class Security {
         private final Jwt jwt = new Jwt();
         private final Cors cors = new Cors();

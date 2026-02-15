@@ -7,25 +7,23 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import io.github.dontknowhatodo.config.AppProperties;
 import io.github.dontknowhatodo.user.UserPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
 
-    @Value("${application.security.jwt.secret}")
-    private String secret;
-
-    @Value("${application.security.jwt.expiration}")
-    private long jwtExpiration;
+    private final AppProperties appProperties;
     
     public String generateToken(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
@@ -43,13 +41,13 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + this.jwtExpiration))
+                .setExpiration(new Date(System.currentTimeMillis() + this.appProperties.getSecurity().getJwt().getExpiration()))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secret);
+        byte[] keyBytes = Decoders.BASE64.decode(this.appProperties.getSecurity().getJwt().getSecret());
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
