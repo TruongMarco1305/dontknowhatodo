@@ -3,6 +3,7 @@ package io.github.dontknowhatodo.user;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import io.github.dontknowhatodo.config.BaseEntityConfig;
+import io.github.dontknowhatodo.user.dto.EditProfileRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -22,6 +23,7 @@ import lombok.Setter;
 @Builder
 @EntityListeners(AuditingEntityListener.class)
 public class UserInfo extends BaseEntityConfig {
+
     @Column(unique = true, nullable = false)
     private String username;
 
@@ -38,5 +40,21 @@ public class UserInfo extends BaseEntityConfig {
     private String name;
 
     @Column()
+    private String bio;
+
+    @Column()
     private String imageUrl;
+
+    @Column()
+    private String company;
+
+    public void create() {
+        
+    }
+
+    public void update(EditProfileRequestDto data) {
+        data.getBio().ifPresent(this::setBio);
+        data.getCompany().ifPresent(this::setCompany);
+        data.getName().ifPresent(this::setName);
+    }
 }

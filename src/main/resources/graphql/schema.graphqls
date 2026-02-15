@@ -2,10 +2,23 @@ type Query {
     getMe: UserType
 }
 
+type Mutation {
+    updateProfile(data: UpdateProfileInput!): UserType
+}
+
 type UserType {
     id: String!
     username: String!
     email: String!
     name: String!
     roles: String!
+    imageUrl: String
+    bio: String
+    company: String
+}
+
+type UpdateProfileInput {
+    name: String
+    bio: String
+    company: String
 }

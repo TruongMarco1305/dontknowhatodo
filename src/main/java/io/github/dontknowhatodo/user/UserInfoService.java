@@ -3,7 +3,6 @@ package io.github.dontknowhatodo.user;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,22 +10,20 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.github.dontknowhatodo.exception.ConflictException;
 import io.github.dontknowhatodo.exception.InternalServerErrorException;
 import io.github.dontknowhatodo.exception.NotFoundException;
+import io.github.dontknowhatodo.user.dto.EditProfileRequestDto;
+import lombok.AllArgsConstructor;
 
 @Service
+@AllArgsConstructor
 public class UserInfoService implements UserDetailsService {
 
     private final UserInfoRepository repository;
     private final PasswordEncoder encoder;
-
-    @Autowired
-    public UserInfoService(UserInfoRepository repository, PasswordEncoder encoder) {
-        this.repository = repository;
-        this.encoder = encoder;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -40,6 +37,7 @@ public class UserInfoService implements UserDetailsService {
         return new User(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
     }
 
+    @Transactional
     public UserInfo addUser(UserInfo userInfo) {
         try {
             userInfo.setPassword(encoder.encode(userInfo.getPassword()));
@@ -64,5 +62,11 @@ public class UserInfoService implements UserDetailsService {
     public UserInfo getUserByUsername(String username){
         return repository.findByUsername(username).
             orElseThrow(() -> new NotFoundException("Invalid user"));
+    }
+
+    public UserInfo updateProfile(String id, EditProfileRequestDto input) {
+        UserInfo user = this.getUserById(id);
+        user.update(input);
+        return repository.save(user);
     }
 }
