@@ -1,6 +1,7 @@
 package io.github.dontknowhatodo.task;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import io.github.dontknowhatodo.config.BaseEntityConfig;
 import io.github.dontknowhatodo.enums.TaskPriority;
@@ -50,13 +51,13 @@ public class Task extends BaseEntityConfig {
     @JoinColumn(name = "owner_id", referencedColumnName = "_id", nullable = false)
     private UserInfo owner;
 
-    public Task(String userId, TaskCreateRequestDto taskCreateRequestDto) {
+    public Task(UUID userId, TaskCreateRequestDto taskCreateRequestDto) {
         this.title = taskCreateRequestDto.getTitle();
         this.description = taskCreateRequestDto.getDescription().orElse(null);
         this.status = TaskStatus.TODO;
         this.priority = TaskPriority.valueOf(taskCreateRequestDto.getPriority().toUpperCase());
         this.deadline = taskCreateRequestDto.getDeadline().isPresent() ? LocalDateTime.parse(taskCreateRequestDto.getDeadline().get()) : null;
         this.owner = new UserInfo();
-        this.owner.setId(java.util.UUID.fromString(userId));
+        this.owner.setId(userId);
     }
 }

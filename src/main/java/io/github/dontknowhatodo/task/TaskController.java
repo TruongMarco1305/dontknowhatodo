@@ -17,8 +17,8 @@ public class TaskController {
     private final TaskService taskService;
 
     @MutationMapping
-    public TaskResponseDto createTask(@User UserPrincipal userPrincipal, @Argument TaskCreateRequestDto taskCreateRequestDto) {
-        Task task = taskService.createTask(userPrincipal.getId().toString(), taskCreateRequestDto);
+    public TaskResponseDto createTask(@User UserPrincipal userPrincipal, @Argument("data") TaskCreateRequestDto taskCreateRequestDto) {
+        Task task = taskService.createTask(userPrincipal.getId(), taskCreateRequestDto);
         return new TaskResponseDto(task);
     }
 } 
