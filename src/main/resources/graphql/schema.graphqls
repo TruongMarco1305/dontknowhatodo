@@ -4,6 +4,7 @@ type Query {
 
 type Mutation {
     updateProfile(data: UpdateProfileInput!): UserType
+    createTask(data: TaskCreateInput!): TaskType
 }
 
 type UserType {
@@ -17,8 +18,26 @@ type UserType {
     company: String
 }
 
+type TaskType {
+    id: String!
+    title: String!
+    description: String!
+    status: String!
+    priority: String!
+    deadline: String
+    createdAt: String!
+    updatedAt: String!
+}
+
 input UpdateProfileInput {
     name: String
     bio: String
     company: String
+}
+
+input TaskCreateInput {
+    title: String!
+    description: String
+    priority: String!
+    deadline: String
 }
