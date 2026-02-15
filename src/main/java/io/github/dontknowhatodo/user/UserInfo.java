@@ -1,5 +1,7 @@
 package io.github.dontknowhatodo.user;
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import io.github.dontknowhatodo.config.BaseEntityConfig;
@@ -52,5 +54,6 @@ public class UserInfo extends BaseEntityConfig {
         data.getBio().ifPresent(this::setBio);
         data.getCompany().ifPresent(this::setCompany);
         data.getName().ifPresent(this::setName);
+        this.setUpdatedAt(LocalDateTime.now());
     }
 }
