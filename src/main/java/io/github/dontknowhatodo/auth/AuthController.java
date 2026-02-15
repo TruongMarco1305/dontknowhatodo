@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
     private final AuthService authService;
-    private AppProperties appProperties;
+    private final AppProperties appProperties;
 
     @PostMapping("/signup")
     public void signup(@RequestBody SignUpDto signUpInfo, HttpServletResponse response) {
