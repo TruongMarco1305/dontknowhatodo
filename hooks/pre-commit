@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+echo "Running Spring Boot Smoke Test..."
+mvn test -Dtest=DontknowhatodoApplicationTests
