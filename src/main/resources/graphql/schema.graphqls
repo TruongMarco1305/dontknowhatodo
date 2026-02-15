@@ -17,7 +17,7 @@ type UserType {
     company: String
 }
 
-type UpdateProfileInput {
+input UpdateProfileInput {
     name: String
     bio: String
     company: String
