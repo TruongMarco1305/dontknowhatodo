@@ -17,7 +17,11 @@ public class AppProperties {
     public Boolean isProduction() {
         return "production".equalsIgnoreCase(this.profile);
     }
-    
+
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
+
     public static class Security {
         private final Jwt jwt = new Jwt();
         private final Cors cors = new Cors();

@@ -42,15 +42,11 @@ public class UserInfo extends BaseEntityConfig {
     @Column()
     private String bio;
 
-    @Column()
+    @Column(columnDefinition="TEXT")
     private String imageUrl;
 
     @Column()
     private String company;
-
-    public void create() {
-        
-    }
 
     public void update(EditProfileRequestDto data) {
         data.getBio().ifPresent(this::setBio);
