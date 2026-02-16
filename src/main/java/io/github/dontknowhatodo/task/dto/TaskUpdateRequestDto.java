@@ -8,9 +8,9 @@ import lombok.Getter;
 
 @Data
 @Getter
-public class TaskCreateRequestDto {
-    private TaskPriority priority;
-    private String title;
+public class TaskUpdateRequestDto {
+    private Optional<TaskPriority> priority;
+    private Optional<String> title;
     private Optional<String> description;
     private Optional<String> deadline;
 }

@@ -1,10 +1,39 @@
 type Query {
     getMe: UserType
+    getTasksByAllStatus(first:Int!): [TaskType!]!
+    getTasksByStatus(status: TaskStatus!, first:Int!, offset:Int!, sortBy: String,  ): TaskConnection!
+    getArchivedTasks(page: Int!, pageSize:Int!): TaskPagination!
 }
 
 type Mutation {
     updateProfile(data: UpdateProfileInput!): UserType
     createTask(data: TaskCreateInput!): TaskType
+    deleteTask(taskId: String!): TaskType!
+    updateTask(taskId: String!, data: TaskUpdateInput!): TaskType!
+    changeArchiveStatus(taskId: String!): TaskType!
+    changeTaskStatus(taskId: String!, newStatus: TaskStatus!): TaskType!
+}
+
+type TaskPagination {
+    isPrevious: Boolean!
+    isNext: Boolean!
+    data: [TaskType!]!
+}
+
+type TaskConnection {
+    edges: [TaskEdge!]!
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+type TaskEdge {
+    cursor: String!
+    node: TaskType!
+}
+
+type PageInfo {
+    hasNextPage: Boolean!
+    nextCursor: String
 }
 
 type UserType {
@@ -22,8 +51,8 @@ type TaskType {
     id: String!
     title: String!
     description: String!
-    status: String!
-    priority: String!
+    status: TaskStatus!
+    priority: TaskPriority!
     deadline: String
     createdAt: String!
     updatedAt: String!
@@ -38,6 +67,26 @@ input UpdateProfileInput {
 input TaskCreateInput {
     title: String!
     description: String
-    priority: String!
+    priority: TaskPriority!
     deadline: String
+}
+
+input TaskUpdateInput {
+    title: String
+    description: String
+    deadline: String
+    priority: TaskPriority
+}
+
+enum TaskStatus {
+    TODO
+    IN_PROGRESS
+    DONE
+    REVIEW
+}
+
+enum TaskPriority {
+    LOW
+    MEDIUM
+    HIGH
 }
