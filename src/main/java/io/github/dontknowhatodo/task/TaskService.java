@@ -59,4 +59,8 @@ public class TaskService {
     public List<Task> getArchivedTasks(UUID userId, int page, int pageSize) {
         return repository.findByOwnerIdAndIsArchived(userId, true).stream().skip((page - 1) * pageSize).limit(pageSize + 1).toList();
     }
+
+    public List<Task> getTasksByStatus(UUID userId, TaskStatus status) {
+        return repository.findByOwnerId(userId).stream().filter(task -> task.getStatus() == status).toList();
+    }
 }

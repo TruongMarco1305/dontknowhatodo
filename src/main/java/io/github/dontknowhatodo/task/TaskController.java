@@ -57,4 +57,10 @@ public class TaskController {
         List<Task> tasks = taskService.getArchivedTasks(userPrincipal.getId(), page, pageSize);
         return new TaskPaginationResponseDto(tasks, page, pageSize);
     }
+
+    @QueryMapping
+    public List<TaskResponseDto> getTasksByStatus(@User UserPrincipal userPrincipal, @Argument TaskStatus status) {
+        List<Task> tasks = taskService.getTasksByStatus(userPrincipal.getId(), status);
+        return tasks.stream().map(TaskResponseDto::new).toList();
+    }
 } 

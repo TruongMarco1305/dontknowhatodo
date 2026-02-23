@@ -1,7 +1,6 @@
 type Query {
     getMe: UserType
-    getTasksByAllStatus(first:Int!): [TaskType!]!
-    getTasksByStatus(status: TaskStatus!, first:Int!, offset:Int!, sortBy: String,  ): TaskConnection!
+    getTasksByStatus(status: TaskStatus): [TaskType!]!
     getArchivedTasks(page: Int!, pageSize:Int!): TaskPagination!
 }
 
@@ -18,22 +17,6 @@ type TaskPagination {
     isPrevious: Boolean!
     isNext: Boolean!
     data: [TaskType!]!
-}
-
-type TaskConnection {
-    edges: [TaskEdge!]!
-    pageInfo: PageInfo!
-    totalCount: Int!
-}
-
-type TaskEdge {
-    cursor: String!
-    node: TaskType!
-}
-
-type PageInfo {
-    hasNextPage: Boolean!
-    nextCursor: String
 }
 
 type UserType {
