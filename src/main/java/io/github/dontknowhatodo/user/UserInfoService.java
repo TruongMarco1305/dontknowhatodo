@@ -54,6 +54,11 @@ public class UserInfoService implements UserDetailsService {
                 .orElseThrow(() -> new NotFoundException("Invalid email or password"));
     }
 
+    public UserInfo getUserByEmailOrUsername(String input) {
+        return repository.findByEmailOrUsername(input)
+                .orElseThrow(() -> new NotFoundException("Invalid email/username or password"));
+    }
+
     public UserInfo getUserById(String id) {
         return repository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new NotFoundException("Invalid user"));

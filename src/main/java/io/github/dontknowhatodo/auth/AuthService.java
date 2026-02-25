@@ -28,7 +28,7 @@ public class AuthService {
     }
 
     public String login(LoginDto loginInfo) {
-        UserInfo user = this.userInfoService.getUserByEmail(loginInfo.getEmail());
+        UserInfo user = this.userInfoService.getUserByEmailOrUsername(loginInfo.getInput());
         if (!passwordEncoder.matches(loginInfo.getPassword(), user.getPassword())) {
             throw new BadRequestException("Invalid email or password");
         }
