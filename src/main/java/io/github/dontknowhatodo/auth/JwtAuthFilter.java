@@ -10,10 +10,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.github.dontknowhatodo.exception.UnauthorizedException;
 import io.github.dontknowhatodo.user.UserInfo;
-import io.github.dontknowhatodo.user.UserPrincipal;
 import io.github.dontknowhatodo.user.UserInfoService;
+import io.github.dontknowhatodo.user.UserPrincipal;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -31,18 +32,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-        String authHeader = request.getHeader("Authorization");
-        String jwt;
-        String subject;
+        String jwt = this.extractCredentialFromCookie(request);
+        String subject; 
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (jwt == null) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        jwt = authHeader.substring(7);
         subject = jwtService.extractSubject(jwt);
-
         if (subject != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserInfo userInfo = this.userInfoService.getUserById(subject);
             UserPrincipal userPrincipal = new UserPrincipal(userInfo);
@@ -59,5 +57,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    private String extractCredentialFromCookie(HttpServletRequest request) {
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("accessToken".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 }
