@@ -50,7 +50,7 @@ public class AuthController {
 
     @DeleteMapping("/logout")
     public void logout(HttpServletResponse response) {
-        ResponseCookie cookie = ResponseCookie.from("accessToken", "")
+        ResponseCookie cookie = ResponseCookie.from("accessToken", null)
                 .httpOnly(true)
                 .secure(this.appProperties.isProduction())
                 .path("/")
