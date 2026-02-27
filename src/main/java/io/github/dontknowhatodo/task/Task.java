@@ -60,20 +60,28 @@ public class Task extends BaseEntityConfig {
 
     public Task(UUID userId, TaskCreateRequestDto taskCreateRequestDto) {
         this.title = taskCreateRequestDto.getTitle();
-        this.description = taskCreateRequestDto.getDescription().orElse(null);
+        this.description = taskCreateRequestDto.getDescription();
         this.status = TaskStatus.TODO;
         this.priority = taskCreateRequestDto.getPriority();
-        this.deadline = taskCreateRequestDto.getDeadline().isPresent() ? LocalDateTime.parse(taskCreateRequestDto.getDeadline().get()) : null;
+        this.deadline = taskCreateRequestDto.getDeadline() != null ? LocalDateTime.parse(taskCreateRequestDto.getDeadline()) : null;
         this.isArchived = false;
         this.owner = new UserInfo();
         this.owner.setId(userId);
     }
 
     public void update(TaskUpdateRequestDto data) {
-        data.getTitle().ifPresent(this::setTitle);
-        data.getDescription().ifPresent(this::setDescription);
-        data.getPriority().ifPresent(_priority -> this.setPriority(_priority));
-        data.getDeadline().ifPresent(_deadline -> this.setDeadline(LocalDateTime.parse(_deadline)));
+        if (data.getTitle() != null) {
+            this.setTitle(data.getTitle());
+        }
+        if (data.getDescription() != null) {
+            this.setDescription(data.getDescription());
+        }
+        if (data.getPriority() != null) {
+            this.setPriority(data.getPriority());
+        }
+        if (data.getDeadline() != null) {
+            this.setDeadline(data.getDeadline() != null ? LocalDateTime.parse(data.getDeadline()) : null);
+        }
         this.setUpdatedAt(LocalDateTime.now());
     }
 }
