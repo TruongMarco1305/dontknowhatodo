@@ -2,6 +2,7 @@ type Query {
     getMe: UserType
     getTasksByStatus(status: TaskStatus): [TaskType!]!
     getArchivedTasks(page: Int!, pageSize:Int!): TaskPagination!
+    getTaskById(taskId: ID!): TaskType!
 }
 
 type Mutation {

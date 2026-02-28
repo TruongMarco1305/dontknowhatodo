@@ -63,4 +63,10 @@ public class TaskController {
         List<Task> tasks = taskService.getTasksByStatus(userPrincipal.getId(), status);
         return tasks.stream().map(TaskResponseDto::new).toList();
     }
+
+    @QueryMapping
+    public TaskResponseDto getTaskById(@User UserPrincipal userPrincipal, @Argument String taskId) {
+        Task task = taskService.getTaskById(userPrincipal.getId(), taskId);
+        return new TaskResponseDto(task);
+    }
 } 

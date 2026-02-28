@@ -61,6 +61,11 @@ public class TaskService {
     }
 
     public List<Task> getTasksByStatus(UUID userId, TaskStatus status) {
-        return repository.findByOwnerId(userId).stream().filter(task -> task.getStatus() == status).toList();
+        return repository.findByOwnerIdAndIsArchivedFalse(userId).stream().filter(task -> task.getStatus() == status).toList();
+    }
+
+    public Task getTaskById(UUID userId, String taskId) {
+        return repository.findByIdAndOwnerId(UUID.fromString(taskId), userId)
+                .orElseThrow(() -> new InternalServerErrorException("Task not found or you don't have permission to view it."));
     }
 }
